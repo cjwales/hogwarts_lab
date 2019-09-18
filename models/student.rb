@@ -76,9 +76,8 @@ class Student
     return student
   end
 
-  def format_name
+  def format_name()
     return "#{@first_name.capitalize} #{@last_name.capitalize}"
   end
-
 
 end
