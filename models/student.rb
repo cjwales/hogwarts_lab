@@ -80,4 +80,9 @@ class Student
     return "#{@first_name.capitalize} #{@last_name.capitalize}"
   end
 
+  def get_house()
+    return "#{@house.capitalize()}"
+  end
+
+
 end
