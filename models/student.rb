@@ -2,15 +2,15 @@ require_relative('../db/sql_runner')
 
 class Student
 
-  attr_accessor :age, :first_name, :last_name, :house
+  attr_accessor :age, :first_name, :last_name, :house_id
   attr_reader :id
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
     @first_name = options['first_name']
     @last_name = options['last_name']
-    @house = options['house']
     @age = options['age'].to_i
+    @house_id = options['house_id'].to_i
   end
 
   def save()
@@ -18,15 +18,15 @@ class Student
     (
       first_name,
       last_name,
-      house,
-      age
+      age,
+      house_id
     )
     VALUES
     (
       $1, $2, $3, $4
     )
     RETURNING id"
-    values = [@first_name, @last_name, @house, @age]
+    values = [@first_name, @last_name, @age, @house_id]
     result = SqlRunner.run(sql, values)
     id = result.first['id']
     @id = id
@@ -38,14 +38,14 @@ class Student
     (
       first_name,
       last_name,
-      house,
-      age
+      age,
+      house_id
     ) =
     (
       $1, $2, $3, $4
     )
     WHERE id = $5"
-    values = [@first_name, @last_name, @house, @age, @id]
+    values = [@first_name, @last_name, @age, @house_id, @id]
     SqlRunner.run(sql, values)
   end
 
@@ -53,6 +53,12 @@ class Student
     sql = "DELETE FROM students
     WHERE id = $1"
     values = [@id]
+    SqlRunner.run(sql, values)
+  end
+
+  def house()
+    sql = "SELECT * FROM houses WHERE houses.id = $1"
+    values = [@house_id]
     SqlRunner.run(sql, values)
   end
 
@@ -78,10 +84,6 @@ class Student
 
   def format_name()
     return "#{@first_name.capitalize()} #{@last_name.capitalize()}"
-  end
-
-  def get_house()
-    return "#{@house.capitalize()}"
   end
 
 
